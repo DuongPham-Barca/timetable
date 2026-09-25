@@ -19,6 +19,8 @@ pnpm dev
 
 Trong tab **Lịch**, chọn tháng để xem số ngày đã dạy của từng bé và tải file CSV. Một bé học nhiều buổi trong cùng ngày vẫn chỉ được tính một ngày. CSV có một cột cho mỗi bé, một dòng cho mỗi ngày trong tháng và dòng cuối là tổng số ngày. Các buổi chưa đánh dấu **Đã dạy** không được tính.
 
+Khi sang tháng mới, nếu đang xem tháng hiện tại thì Lịch tự chuyển sang tháng mới và tổng số ngày đã dạy bắt đầu từ 0. Tháng cũ vẫn có thể xem và tải CSV.
+
 Mỗi bé tự có lịch vào mọi ngày kể từ ngày bắt đầu của bé, kể cả cuối tuần. Bé mới bắt đầu từ ngày được thêm; bé đã có trước khi bật tính năng được gán ngày bắt đầu khi mở phiên bản mới lần đầu. Buổi tự hiện chỉ được lưu thành dữ liệu thật khi đánh dấu **Đã dạy** hoặc nhập thêm thông tin buổi học. Ngày chưa đánh dấu vẫn xuất hiện trong Lịch để ghi nhận muộn.
 
 Chạy kiểm tra dữ liệu và CSV bằng `pnpm test` (cần Node.js 22 trở lên).

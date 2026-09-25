@@ -25,7 +25,7 @@ import { UsersThree } from '@phosphor-icons/react/UsersThree'
 import { X } from '@phosphor-icons/react/X'
 import { Trash } from '@phosphor-icons/react/Trash'
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore'
-import { asLocalDate, type Child, type DisplayLesson, type Lesson } from './lib/data'
+import { asLocalDate, calendarMonthAfterDateChange, monthKey, type Child, type DisplayLesson, type Lesson } from './lib/data'
 import { dailyLessonId, datesInMonth, expandDailyLessons } from './lib/dailySchedule'
 import { getMonthlyTeachingReport, monthlyReportCsv, type MonthlyTeachingRecord } from './lib/monthlyReport'
 import { firestore } from './lib/firebase'
@@ -91,6 +91,7 @@ function App() {
   const [loadError, setLoadError] = useState('')
   const [currentDate, setCurrentDate] = useState(() => asLocalDate())
   const [calendarMonth, setCalendarMonth] = useState(() => { const now = new Date(); return new Date(now.getFullYear(), now.getMonth(), 1) })
+  const previousCurrentDate = useRef(currentDate)
   const savingVirtual = useRef(new Set<string>())
 
   useEffect(() => {
@@ -111,6 +112,14 @@ function App() {
     window.addEventListener('focus', refreshDate)
     return () => { window.clearTimeout(midnightTimer); document.removeEventListener('visibilitychange', refreshDate); window.removeEventListener('focus', refreshDate) }
   }, [])
+
+  useEffect(() => {
+    const previousDate = previousCurrentDate.current
+    if (previousDate !== currentDate) {
+      setCalendarMonth((viewedMonth) => calendarMonthAfterDateChange(viewedMonth, previousDate, currentDate))
+      previousCurrentDate.current = currentDate
+    }
+  }, [currentDate])
 
   useEffect(() => {
     const database = firestore
@@ -269,22 +278,24 @@ function LessonCard({ lesson, child, dataReady, onToggle, onEdit }: { lesson: Di
 
 function CalendarView({ lessons, kids, month: monthCursor, todayDate, dataReady, onChangeMonth, onToggle, onMarkDay, onAddTaught, onEdit }: { lessons: Lesson[]; kids: Child[]; month: Date; todayDate: string; dataReady: boolean; onChangeMonth: (date: Date) => void; onToggle: (lesson: DisplayLesson) => void; onMarkDay: (date: string) => void; onAddTaught: (date: string, childId: string) => Promise<boolean>; onEdit: (lesson: DisplayLesson) => void }) {
   const year = monthCursor.getFullYear(), month = monthCursor.getMonth(), firstDay = (new Date(year, month, 1).getDay() + 6) % 7, days = new Date(year, month + 1, 0).getDate()
-  const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`
+  const selectedMonthKey = monthKey(monthCursor)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
-  const report = useMemo(() => getMonthlyTeachingReport(kids, lessons, monthKey), [kids, lessons, monthKey])
-  const displayedLessons = useMemo(() => expandDailyLessons(kids, lessons, datesInMonth(monthKey)), [kids, lessons, monthKey])
+  useEffect(() => { setSelectedDate(null) }, [selectedMonthKey])
+  const report = useMemo(() => getMonthlyTeachingReport(kids, lessons, selectedMonthKey), [kids, lessons, selectedMonthKey])
+  const displayedLessons = useMemo(() => expandDailyLessons(kids, lessons, datesInMonth(selectedMonthKey)), [kids, lessons, selectedMonthKey])
   const lessonsByDate = new Map<string, DisplayLesson[]>()
   displayedLessons.forEach((lesson) => lessonsByDate.set(lesson.lesson_date, [...(lessonsByDate.get(lesson.lesson_date) ?? []), lesson]))
   const cells = Array.from({ length: firstDay + days }, (_, index) => index < firstDay ? null : index - firstDay + 1)
-  const dateKey = (day: number) => `${monthKey}-${String(day).padStart(2, '0')}`
+  const dateKey = (day: number) => `${selectedMonthKey}-${String(day).padStart(2, '0')}`
   const selectMonth = (nextMonth: Date) => { onChangeMonth(nextMonth); setSelectedDate(null) }
-  const selectedLessons = selectedDate ? lessonsByDate.get(selectedDate) ?? [] : []
+  const visibleSelectedDate = selectedDate?.startsWith(`${selectedMonthKey}-`) ? selectedDate : null
+  const selectedLessons = visibleSelectedDate ? lessonsByDate.get(visibleSelectedDate) ?? [] : []
   const downloadCsv = () => {
-    const blob = new Blob([monthlyReportCsv(report, monthKey)], { type: 'text/csv;charset=utf-8' })
+    const blob = new Blob([monthlyReportCsv(report, selectedMonthKey)], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = `tong-hop-day-${monthKey}.csv`
+    link.download = `tong-hop-day-${selectedMonthKey}.csv`
     document.body.appendChild(link)
     link.click()
     link.remove()
@@ -297,14 +308,14 @@ function CalendarView({ lessons, kids, month: monthCursor, todayDate, dataReady,
     <section className="calendar-card">
       <div className="calendar-toolbar"><button aria-label="Tháng trước" onClick={() => selectMonth(new Date(year, month - 1, 1))}><CaretLeft /></button><h2>Tháng {month + 1} · {year}</h2><button aria-label="Tháng sau" onClick={() => selectMonth(new Date(year, month + 1, 1))}><CaretRight /></button></div>
       <div className="calendar-week">{weekLabels.map((day) => <b key={day}>{day}</b>)}</div>
-      <div className="calendar-grid">{cells.map((day, index) => { const key = day ? dateKey(day) : '', dayLessons = lessonsByDate.get(key) ?? [], hasLesson = dayLessons.length > 0, isComplete = hasLesson && dayLessons.every((lesson) => lesson.completed); return <button type="button" key={index} disabled={!day} onClick={() => day && setSelectedDate(key)} className={`calendar-day ${hasLesson ? 'has-lesson' : ''} ${isComplete ? 'completed-day' : ''} ${key === todayDate ? 'current-day' : ''} ${key === selectedDate ? 'selected-day' : ''}`}>{day && <><b>{day}</b>{hasLesson && <i />}</>}</button> })}</div>
+      <div className="calendar-grid">{cells.map((day, index) => { const key = day ? dateKey(day) : '', dayLessons = lessonsByDate.get(key) ?? [], hasLesson = dayLessons.length > 0, isComplete = hasLesson && dayLessons.every((lesson) => lesson.completed); return <button type="button" key={index} disabled={!day} onClick={() => day && setSelectedDate(key)} className={`calendar-day ${hasLesson ? 'has-lesson' : ''} ${isComplete ? 'completed-day' : ''} ${key === todayDate ? 'current-day' : ''} ${key === visibleSelectedDate ? 'selected-day' : ''}`}>{day && <><b>{day}</b>{hasLesson && <i />}</>}</button> })}</div>
     </section>
     <div className="calendar-key"><span className="key-pending" /> Còn lịch <span className="key-done" /> Đã dạy xong <span className="key-today" /> Hôm nay</div>
     <section className="monthly-report" aria-labelledby="monthly-report-title">
       <div className="monthly-report-heading"><div><h2 id="monthly-report-title">Tổng hợp dạy tháng {month + 1}</h2><p>Mỗi bé được tính một lần cho mỗi ngày đã dạy.</p></div><button type="button" className="download-csv" disabled={!dataReady || !kids.length} onClick={downloadCsv}><DownloadSimple weight="bold" /> Tải CSV</button></div>
       {kids.length ? <div className="monthly-report-grid">{report.map((entry) => <MonthlyReportCard key={entry.child.id} entry={entry} />)}</div> : <p className="monthly-report-empty">Chưa có bé nào để tổng hợp. Thêm bé trong mục Các bé nhé.</p>}
     </section>
-    {selectedDate && <CalendarDetails key={selectedDate} date={selectedDate} lessons={selectedLessons} kids={kids} dataReady={dataReady} onToggle={onToggle} onMarkDay={onMarkDay} onAddTaught={onAddTaught} onEdit={editFromCalendar} onClose={() => setSelectedDate(null)} />}
+    {visibleSelectedDate && <CalendarDetails key={visibleSelectedDate} date={visibleSelectedDate} lessons={selectedLessons} kids={kids} dataReady={dataReady} onToggle={onToggle} onMarkDay={onMarkDay} onAddTaught={onAddTaught} onEdit={editFromCalendar} onClose={() => setSelectedDate(null)} />}
   </>
 }
 
