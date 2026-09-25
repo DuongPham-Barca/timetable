@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Pacifico&display=swap');
+
+:root { font-family: Nunito, ui-rounded, system-ui, sans-serif; color: #3c2924; background: #fffaf2; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.app { min-height: 100vh; padding: 44px 24px 130px; position: relative; overflow: hidden; background-color: #fffaf2; background-image: linear-gradient(#f2dcd3 1px, transparent 1px), linear-gradient(90deg, #f2dcd3 1px, transparent 1px); background-size: 35px 35px; }
+.shell { width: min(1210px, 100%); margin: 0 auto; position: relative; z-index: 1; }
+.brand { color: #df8998; font: 30px Pacifico, cursive; line-height: 1.3; }
+.theme-switch { position: fixed; z-index: 4; top: 42px; right: max(calc((100vw - 1210px) / 2), 34px); width: 46px; height: 46px; border-radius: 50%; border: 1px solid #eadbd2; background: #fffdf9; color: #45312c; font-size: 23px; box-shadow: 0 2px 7px #3b201420; }
+.decor { position: fixed; z-index: 0; color: #f5b5c7; opacity: .55; font-size: 28px; pointer-events: none; }
+.decor-flower { top: 40%; left: 6%; }.decor-sparkle { top: 64%; right: 7%; color: #ffcc89; }.decor-heart { bottom: 22%; right: 6%; font-size: 34px; }
+.today-top { margin-top: 6px; }.greeting-card { height: 192px; margin-top: 30px; padding: 36px; display: flex; justify-content: space-between; align-items: center; position: relative; border: 1px solid #e9d8ce; border-radius: 30px; background: #fffefa; box-shadow: 0 4px 5px #43251c12; overflow: hidden; }
+.greeting-card small { color: #e18694; font-weight: 800; font-size: 17px; text-transform: capitalize; }.greeting-card h1, .page-heading h1 { margin: 7px 0 8px; font-size: 39px; line-height: 1; letter-spacing: -.8px; }.greeting-card h1 span { font-size: 32px; }.greeting-card p, .page-heading p { margin: 0; color: #926d62; font-size: 18px; }
+.bunny { align-self: end; width: 165px; color: #f1a9af; font-size: 135px; line-height: .9; filter: drop-shadow(0 5px 7px #c5958350); }.bunny span { position: absolute; right: 55px; bottom: 18px; color: #e39ca1; font-size: 42px; transform: rotate(-22deg); }
+.stats-row, .summary-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 30px; }.stat-card { min-height: 144px; border-radius: 25px; padding: 25px 21px; display: flex; flex-direction: column; gap: 8px; }.stat-card > span { font-size: 23px; }.stat-card small { font-size: 15px; font-weight: 700; color: #80665e; }.stat-card b { font-size: 23px; }.mint { background: #c7f1d4; }.peach { background: #ffdfbd; }.lilac { background: #e3d6ff; }.rose { background: #facdd5; }
+.progress { margin-top: 29px; }.progress > div { display: flex; justify-content: space-between; font-size: 16px; }.progress > div b { color: #49322b; }.progress > span { display: block; height: 16px; border-radius: 999px; background: #f4e6df; margin-top: 12px; overflow: hidden; }.progress i { display: block; height: 100%; border-radius: inherit; background: #df8797; transition: width .3s ease; }
+.section-title { margin-top: 35px; display: flex; justify-content: space-between; align-items: center; }.section-title h2, .chart-card h2 { font-size: 26px; margin: 0; }.section-title p { margin: 0; color: #986e64; font-size: 17px; }.lesson-list { display: grid; gap: 14px; margin-top: 18px; }.lesson-card { min-height: 126px; padding: 20px; border-radius: 27px; border: 1px solid #eadad2; background: #fffefa; display: flex; align-items: center; gap: 16px; box-shadow: 0 3px 5px #43251b11; }.lesson-card.is-complete { background: #c9f1d8; }.avatar { flex: 0 0 auto; width: 58px; height: 58px; display: grid; place-items: center; border-radius: 21px; font-size: 30px; }.avatar.pink { background: #ffd5df; }.avatar.peach { background: #ffe0bb; }.avatar.lilac { background: #e6d9ff; }.lesson-info { align-self: stretch; display: flex; flex-direction: column; justify-content: center; }.lesson-meta { display: flex; gap: 14px; color: #a06960; font-size: 15px; }.lesson-meta b { color: #df8797; }.lesson-info h3 { margin: 5px 0 2px; font-size: 24px; }.lesson-info p { margin: 0; color: #987269; font-size: 17px; }.done-btn { margin-left: auto; flex: none; min-height: 48px; padding: 0 18px; border: 0; border-radius: 999px; background: #dc8494; color: white; font-weight: 800; box-shadow: 0 3px 5px #9a546036; }.done-btn.muted { background: #c4eccf; color: #649776; box-shadow: none; }.streak-banner, .cheer-banner, .great-banner { min-height: 96px; margin-top: 15px; padding: 18px 30px; border-radius: 25px; background: #e1d5ff; display: flex; align-items: center; gap: 20px; }.streak-banner span { font-size: 30px; }.streak-banner b { font-size: 21px; }.streak-banner p, .great-banner p { margin: 3px 0 0; color: #856864; font-size: 17px; }.empty-state { padding: 45px; border: 1px dashed #e4b4b4; border-radius: 24px; text-align: center; color: #987269; background: #fffefa; }
+.page-heading { margin: 5px 0 34px; }.heading-title { margin-top: 32px; display: flex; align-items: center; gap: 20px; }.heading-emoji { font-size: 48px; }.page-heading h1 { font-size: 38px; margin-bottom: 4px; }.page-heading p { font-size: 17px; }.calendar-card, .chart-card { border: 1px solid #e9d9d1; border-radius: 29px; background: #fffefa; box-shadow: 0 3px 5px #42221b0f; }.calendar-card { padding: 28px 30px 36px; }.calendar-toolbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin-bottom: 30px; }.calendar-toolbar h2 { color: #df8998; font: 24px Pacifico, cursive; margin: 0; }.calendar-toolbar button { border: 0; background: transparent; color: #3b2924; font-size: 31px; line-height: 1; }.calendar-toolbar button:last-child { justify-self: end; }.calendar-week, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }.calendar-week { text-align: center; color: #80625b; font-size: 15px; padding-bottom: 8px; }.calendar-day { min-height: 105px; margin: 4px; padding: 11px; position: relative; display: flex; justify-content: center; align-items: center; border-radius: 24px; }.calendar-day.has-lesson { background: #c9f1d8; }.calendar-day.current-day { background: #da8695; color: white; box-shadow: 0 4px 5px #8f515734; }.calendar-day i { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #df8797; bottom: 9px; }.calendar-day.current-day i { background: white; }.calendar-key { display: flex; align-items: center; gap: 9px; margin-top: 22px; color: #8f6c63; font-size: 15px; font-weight: 700; }.calendar-key span:not(.key-done):not(.key-today) { margin-left: 10px; }.key-done, .key-today { width: 15px; height: 15px; border-radius: 50%; background: #c9f1d8; }.key-today { background: #db8796; margin-left: 9px; }
+.kids-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }.kid-card { min-height: 300px; padding: 25px; background: #fffefa; border: 1px solid #e9d9d1; border-radius: 29px; box-shadow: 0 3px 5px #42221b0f; }.avatar.big { width: 80px; height: 80px; border-radius: 28px; font-size: 42px; }.kid-card h2 { margin: 22px 0 4px; font-size: 26px; }.kid-card p { color: #926d62; font-size: 17px; margin: 0; }.kid-card hr { margin: 26px 0; border: 0; border-top: 1px solid #ecdcd3; }.kid-card > div:last-child { display: flex; justify-content: space-between; align-items: center; }.week-pill { padding: 7px 12px; border-radius: 999px; background: #d5f1d7; color: #27613e; font-weight: 800; }.cheer-banner { justify-content: center; margin-top: 30px; background: #ffe9a9; font-size: 20px; }.summary-stats { grid-template-columns: repeat(3, 1fr); margin-top: 0; }.chart-card { padding: 28px 26px; margin-top: 30px; }.chart { height: 255px; display: flex; align-items: end; justify-content: space-around; gap: 20px; padding: 26px 35px 0; }.chart > div { height: 100%; display: flex; flex-direction: column; justify-content: end; align-items: center; gap: 10px; flex: 1; }.chart i { display: block; width: min(52px, 100%); min-height: 25px; border-radius: 20px 20px 0 0; background: #e2d5ff; }.chart i.highlight { background: #d98696; }.chart span { color: #85635d; font-weight: 800; }.great-banner { background: #ffdfbd; margin-top: 25px; justify-content: center; flex-direction: column; gap: 1px; text-align: center; font-size: 20px; }.great-banner b { font-size: 21px; }
+.floating-add { position: fixed; z-index: 5; width: 70px; height: 70px; right: max(calc((100vw - 1435px) / 2), 32px); bottom: 120px; border: 0; border-radius: 50%; color: white; background: #dd8595; box-shadow: 0 4px 8px #8e535660; font-size: 34px; line-height: 1; }.bottom-nav { position: fixed; z-index: 4; bottom: 0; left: 0; right: 0; height: 100px; padding: 10px max(calc((100vw - 700px) / 2), 14px); display: flex; justify-content: center; gap: clamp(25px, 8vw, 105px); background: #fffefa; border-top: 1px solid #eadbd2; }.bottom-nav button { width: 110px; border: 0; border-radius: 14px; background: transparent; color: #846c64; font-weight: 800; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }.bottom-nav span { width: 42px; height: 35px; display: grid; place-items: center; border-radius: 18px; font-size: 25px; line-height: 1; }.bottom-nav button.active { color: #d9798b; }.bottom-nav button.active span { background: #ffd3dc; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 10; padding: 24px; background: #3e2b2533; backdrop-filter: blur(9px); display: grid; place-items: center; }.lesson-modal { width: min(530px, 100%); padding: 34px; position: relative; border-radius: 28px; background: #fffefa; box-shadow: 0 18px 35px #43251c44; }.lesson-modal h2 { margin: 0 0 28px; font-size: 27px; }.close-modal { position: absolute; top: 26px; right: 30px; border: 0; background: transparent; color: #5f4139; font-size: 31px; line-height: 1; }.lesson-modal label { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; font-weight: 800; color: #5f433b; }.lesson-modal input, .lesson-modal select { width: 100%; height: 55px; padding: 0 15px; border: 1px solid #f0d8ce; border-radius: 999px; outline-color: #de8a99; background: #fffbf4; color: #4a342e; font-weight: 700; }.form-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }.save-btn { margin-top: 26px; width: 100%; height: 59px; border: 0; border-radius: 999px; color: white; background: #dc8494; font-size: 18px; font-weight: 800; box-shadow: 0 3px 5px #9a546036; }
+.app-dark { color: #f6eae5; background-color: #332827; background-image: linear-gradient(#5e4744 1px, transparent 1px), linear-gradient(90deg, #5e4744 1px, transparent 1px); }.app-dark .greeting-card, .app-dark .lesson-card, .app-dark .calendar-card, .app-dark .chart-card, .app-dark .kid-card, .app-dark .bottom-nav, .app-dark .lesson-modal { background: #423431; border-color: #624b47; }.app-dark .greeting-card p, .app-dark .page-heading p, .app-dark .lesson-info p, .app-dark .kid-card p, .app-dark .streak-banner p, .app-dark .great-banner p { color: #d7bcb3; }.app-dark .theme-switch { background: #423431; color: #fff; border-color: #624b47; }.app-dark .bottom-nav { color: #ddc8c0; }.app-dark .calendar-week, .app-dark .calendar-key, .app-dark .lesson-meta { color: #d4b7b0; }.app-dark .lesson-card.is-complete { background: #3f7759; }
+@media (max-width: 700px) { .app { padding: 25px 16px 104px; background-size: 27px 27px; }.brand { font-size: 25px; }.theme-switch { top: 22px; right: 18px; width: 42px; height: 42px; }.greeting-card { height: 200px; padding: 25px; margin-top: 20px; }.greeting-card h1 { font-size: 29px; max-width: 235px; }.greeting-card p { font-size: 15px; max-width: 220px; }.greeting-card small { font-size: 14px; }.bunny { font-size: 94px; width: 88px; }.bunny span { right: 22px; font-size: 30px; }.stats-row { gap: 10px; margin-top: 18px; }.stat-card { min-height: 123px; padding: 18px 15px; }.stat-card b { font-size: 19px; }.stat-card small { font-size: 13px; }.section-title { margin-top: 26px; }.section-title h2 { font-size: 22px; }.section-title p { font-size: 13px; }.lesson-card { min-height: 105px; padding: 14px; gap: 11px; border-radius: 21px; }.avatar { width: 48px; height: 48px; border-radius: 18px; font-size: 25px; }.lesson-info h3 { font-size: 19px; }.lesson-info p, .lesson-meta { font-size: 13px; }.lesson-meta { gap: 8px; }.done-btn { min-height: 39px; padding: 0 10px; font-size: 12px; }.streak-banner { min-height: 76px; padding: 14px 19px; }.streak-banner b { font-size: 16px; }.streak-banner p { font-size: 13px; }.page-heading { margin-bottom: 25px; }.heading-title { gap: 13px; margin-top: 22px; }.heading-emoji { font-size: 38px; }.page-heading h1 { font-size: 29px; }.page-heading p { font-size: 14px; }.calendar-card { padding: 20px 10px 23px; border-radius: 23px; }.calendar-toolbar { margin-bottom: 18px; }.calendar-toolbar h2 { font-size: 19px; }.calendar-day { min-height: 57px; margin: 2px; border-radius: 16px; padding: 6px; font-size: 14px; }.calendar-day i { bottom: 4px; }.calendar-week { font-size: 12px; }.calendar-key { font-size: 12px; flex-wrap: wrap; }.kids-grid, .summary-stats { grid-template-columns: 1fr; gap: 12px; }.kid-card { min-height: 0; padding: 21px; }.kid-card h2 { margin-top: 14px; }.kid-card hr { margin: 18px 0; }.summary-stats .stat-card { min-height: 105px; }.chart-card { padding: 20px 10px; margin-top: 20px; }.chart-card h2 { font-size: 21px; margin-left: 9px; }.chart { height: 205px; padding: 20px 10px 0; gap: 10px; }.floating-add { width: 58px; height: 58px; right: 20px; bottom: 90px; font-size: 29px; }.bottom-nav { height: 75px; gap: 0; padding: 5px; justify-content: space-around; }.bottom-nav button { width: 25%; font-size: 12px; }.bottom-nav span { width: 34px; height: 28px; font-size: 20px; }.lesson-modal { padding: 27px 20px; border-radius: 24px; }.lesson-modal h2 { font-size: 23px; }.close-modal { right: 20px; }.form-two { gap: 8px; }.lesson-modal input, .lesson-modal select { height: 49px; }.decor { display: none; } }
+@media (max-width: 390px) { .greeting-card h1 { font-size: 26px; }.done-btn { display: none; }.lesson-card { min-height: 96px; }.calendar-day { min-height: 51px; } }
+
+/* Motion layer: intentionally subtle so the planner remains calm and readable. */
+.app { animation: grid-drift 28s linear infinite; }
+.shell { animation: page-enter .55s cubic-bezier(.22,.9,.3,1) both; }
+.brand { animation: brand-wiggle 5s ease-in-out infinite; transform-origin: left center; }
+.theme-switch { transition: transform .25s ease, box-shadow .25s ease, background .25s ease; }
+.theme-switch:hover { transform: rotate(20deg) scale(1.08); box-shadow: 0 5px 14px #3b20142c; }
+.decor-flower { animation: float 5s ease-in-out infinite; }
+.decor-sparkle { animation: twinkle 3s ease-in-out infinite; }
+.decor-heart { animation: float 6s 1s ease-in-out infinite; }
+.greeting-card { animation: card-enter .52s .08s cubic-bezier(.22,.9,.3,1) both; transition: transform .3s ease, box-shadow .3s ease; }
+.greeting-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px #43251c18; }
+.bunny { animation: bunny-bounce 3.2s ease-in-out infinite; }
+.bunny span { animation: pencil-wave 2.4s ease-in-out infinite; transform-origin: bottom left; }
+.stat-card { animation: card-enter .5s .16s cubic-bezier(.22,.9,.3,1) both; transition: transform .25s ease, box-shadow .25s ease; }
+.stat-card:nth-child(2) { animation-delay: .23s; }
+.stat-card:nth-child(3) { animation-delay: .3s; }
+.stat-card:hover { transform: translateY(-5px) rotate(.3deg); box-shadow: 0 10px 18px #68423e18; }
+.stat-card > span, .streak-banner > span { animation: icon-pop 2.8s ease-in-out infinite; }
+.progress { animation: card-enter .5s .3s cubic-bezier(.22,.9,.3,1) both; }
+.progress i { position: relative; transition: width .55s cubic-bezier(.2,.8,.3,1); }
+.progress i::after { content: ''; position: absolute; inset: 0; width: 45%; background: linear-gradient(90deg, transparent, #fff8, transparent); animation: progress-shine 2.8s ease-in-out infinite; }
+.lesson-card { animation: card-enter .45s cubic-bezier(.22,.9,.3,1) both; transition: transform .25s ease, box-shadow .25s ease, background .25s ease; }
+.lesson-card:nth-child(1) { animation-delay: .36s; }.lesson-card:nth-child(2) { animation-delay: .43s; }.lesson-card:nth-child(3) { animation-delay: .5s; }
+.lesson-card:hover { transform: translateX(5px); box-shadow: 0 9px 18px #43251b19; }
+.lesson-card:hover .avatar { transform: rotate(-7deg) scale(1.08); }
+.avatar { transition: transform .25s ease; }
+.done-btn, .save-btn { transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.done-btn:hover, .save-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 12px #9a54604d; }
+.done-btn:active, .save-btn:active { transform: scale(.95); }
+.streak-banner, .cheer-banner, .great-banner { animation: card-enter .5s .56s cubic-bezier(.22,.9,.3,1) both; }
+.page-heading { animation: card-enter .5s cubic-bezier(.22,.9,.3,1) both; }
+.calendar-day { transition: transform .2s ease, background .2s ease; }
+.calendar-day.has-lesson:hover { transform: scale(1.06); }
+.calendar-day.current-day { animation: today-pulse 2.5s ease-in-out infinite; }
+.kid-card, .chart-card, .calendar-card { animation: card-enter .5s .12s cubic-bezier(.22,.9,.3,1) both; transition: transform .25s ease, box-shadow .25s ease; }
+.kid-card:hover, .chart-card:hover { transform: translateY(-4px); box-shadow: 0 12px 22px #43251b18; }
+.kid-card:nth-child(2) { animation-delay: .2s; }.kid-card:nth-child(3) { animation-delay: .28s; }
+.chart i { animation: grow-bar .8s cubic-bezier(.22,.9,.3,1) both; transform-origin: bottom; }
+.chart > div:nth-child(2) i { animation-delay: .08s; }.chart > div:nth-child(3) i { animation-delay: .16s; }.chart > div:nth-child(4) i { animation-delay: .24s; }.chart > div:nth-child(5) i { animation-delay: .32s; }.chart > div:nth-child(6) i { animation-delay: .4s; }.chart > div:nth-child(7) i { animation-delay: .48s; }
+.floating-add { animation: add-pulse 2.4s ease-in-out infinite; transition: transform .2s ease, box-shadow .2s ease; }
+.floating-add:hover { animation-play-state: paused; transform: rotate(90deg) scale(1.1); box-shadow: 0 7px 18px #8e53567a; }
+.bottom-nav button { transition: color .2s ease, transform .2s ease; }.bottom-nav button:hover { transform: translateY(-3px); }.bottom-nav span { transition: transform .22s ease, background .22s ease; }.bottom-nav button.active span { animation: nav-pop .36s ease-out both; }
+.modal-backdrop { animation: overlay-in .22s ease-out both; }.lesson-modal { animation: modal-enter .35s cubic-bezier(.22,.9,.3,1) both; }
+
+@keyframes page-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes card-enter { from { opacity: 0; transform: translateY(15px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes grid-drift { from { background-position: 0 0, 0 0; } to { background-position: 35px 35px, 35px 35px; } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-12px) rotate(5deg); } }
+@keyframes twinkle { 0%, 100% { opacity: .35; transform: scale(.8) rotate(0); } 50% { opacity: .9; transform: scale(1.2) rotate(18deg); } }
+@keyframes brand-wiggle { 0%, 90%, 100% { transform: rotate(0); } 94% { transform: rotate(-1.5deg); } 97% { transform: rotate(1.5deg); } }
+@keyframes bunny-bounce { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-8px) rotate(-1deg); } }
+@keyframes pencil-wave { 0%, 100% { transform: rotate(-22deg); } 50% { transform: rotate(-12deg); } }
+@keyframes icon-pop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.13) rotate(-4deg); } }
+@keyframes progress-shine { 0% { transform: translateX(-160%); } 55%, 100% { transform: translateX(320%); } }
+@keyframes today-pulse { 0%, 100% { box-shadow: 0 4px 5px #8f515734; } 50% { box-shadow: 0 5px 16px #d97e92a6; } }
+@keyframes grow-bar { from { transform: scaleY(.05); opacity: .2; } to { transform: scaleY(1); opacity: 1; } }
+@keyframes add-pulse { 0%, 100% { box-shadow: 0 4px 8px #8e535660, 0 0 0 0 #dd859540; } 50% { box-shadow: 0 5px 13px #8e535660, 0 0 0 12px #dd859500; } }
+@keyframes nav-pop { 0% { transform: scale(.7); } 70% { transform: scale(1.13); } 100% { transform: scale(1); } }
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-enter { from { opacity: 0; transform: translateY(25px) scale(.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+
+/* More compact desktop rhythm: keeps the whole daily plan visible with less scrolling. */
+@media (min-width: 701px) {
+  .app { padding-top: 33px; padding-bottom: 108px; }
+  .brand { font-size: 26px; }
+  .theme-switch { top: 31px; }
+  .greeting-card { height: 166px; margin-top: 19px; padding: 28px 34px; }
+  .greeting-card small { font-size: 15px; }
+  .greeting-card h1 { margin: 5px 0 6px; font-size: 33px; }
+  .greeting-card h1 span { font-size: 27px; }
+  .greeting-card p { font-size: 16px; }
+  .bunny { width: 135px; font-size: 110px; }
+  .bunny span { right: 46px; bottom: 14px; font-size: 34px; }
+  .stats-row { margin-top: 20px; }
+  .stat-card { min-height: 112px; padding: 17px 20px; gap: 4px; border-radius: 22px; }
+  .stat-card > span { font-size: 19px; }
+  .stat-card small { font-size: 13px; }
+  .stat-card b { font-size: 20px; }
+  .progress { margin-top: 20px; }
+  .progress > div { font-size: 14px; }
+  .progress > span { height: 13px; margin-top: 9px; }
+  .section-title { margin-top: 24px; }
+  .section-title h2, .chart-card h2 { font-size: 22px; }
+  .section-title p { font-size: 15px; }
+  .lesson-list { gap: 11px; margin-top: 13px; }
+  .lesson-card { min-height: 105px; padding: 16px 20px; border-radius: 23px; }
+  .avatar { width: 51px; height: 51px; border-radius: 18px; font-size: 26px; }
+  .lesson-meta { font-size: 13px; }
+  .lesson-info h3 { margin: 3px 0 1px; font-size: 21px; }
+  .lesson-info p { font-size: 15px; }
+  .done-btn { min-height: 42px; font-size: 14px; }
+  .streak-banner { min-height: 79px; margin-top: 12px; padding: 14px 26px; border-radius: 22px; }
+  .streak-banner span { font-size: 25px; }
+  .streak-banner b { font-size: 18px; }
+  .streak-banner p { font-size: 15px; }
+  .page-heading { margin-bottom: 26px; }
+  .heading-title { margin-top: 24px; }
+  .heading-emoji { font-size: 42px; }
+  .page-heading h1 { font-size: 32px; }
+  .page-heading p { font-size: 15px; }
+  .calendar-card { padding: 23px 27px 28px; }
+  .calendar-day { min-height: 86px; }
+  .kid-card { min-height: 255px; padding: 22px; }
+  .avatar.big { width: 68px; height: 68px; font-size: 36px; }
+  .kid-card h2 { margin-top: 16px; font-size: 23px; }
+  .kid-card p { font-size: 15px; }
+  .kid-card hr { margin: 18px 0; }
+  .cheer-banner, .great-banner { min-height: 80px; font-size: 17px; }
+  .summary-stats .stat-card { min-height: 115px; }
+  .chart-card { margin-top: 20px; padding: 22px; }
+  .chart { height: 205px; padding-top: 16px; }
+  .floating-add { width: 61px; height: 61px; bottom: 100px; font-size: 30px; }
+  .bottom-nav { height: 83px; }
+  .bottom-nav button { font-size: 14px; }
+}
+
+/* Phosphor icons share one visual weight and color treatment across the app. */
+.theme-switch svg { width: 22px; height: 22px; vertical-align: middle; }
+.heading-emoji { display: grid; place-items: center; color: #df8998; }
+.heading-emoji svg { width: 44px; height: 44px; }
+.greeting-card h1 span { display: inline-flex; vertical-align: middle; color: #de8797; }
+.greeting-card h1 span svg { width: .82em; height: .82em; }
+.bunny > svg { width: 1em; height: 1em; }
+.bunny span { display: grid; place-items: center; }
+.bunny span svg { width: 42px; height: 42px; }
+.stat-card > span { display: inline-flex; color: #d86f86; }
+.stat-card > span svg { width: 24px; height: 24px; }
+.section-title p { display: inline-flex; align-items: center; gap: 5px; }
+.section-title p svg { width: 17px; height: 17px; color: #e7996f; }
+.streak-banner > span { display: inline-flex; color: #d47795; }
+.streak-banner > span svg { width: 29px; height: 29px; }
+.lesson-meta b { display: inline-flex; align-items: center; gap: 4px; }
+.lesson-meta b svg { width: 16px; height: 16px; }
+.done-btn, .save-btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+.done-btn svg { width: 16px; height: 16px; }
+.save-btn svg { width: 20px; height: 20px; }
+.bottom-nav span svg { width: 23px; height: 23px; }
+.floating-add { display: grid; place-items: center; }
+.floating-add svg { width: 29px; height: 29px; }
+.calendar-key svg { width: 16px; height: 16px; margin-left: 10px; color: #e0788d; }
+.week-pill { display: inline-flex; align-items: center; gap: 3px; }
+.week-pill svg { width: 15px; height: 15px; }
+.cheer-banner svg { width: 27px; height: 27px; color: #df8395; }
+.cheer-banner svg:last-child { color: #e5a06a; }
+.great-banner > svg { width: 30px; height: 30px; color: #d38377; }
+.great-banner b { display: inline-flex; align-items: center; gap: 4px; }
+.great-banner b svg { width: 17px; height: 17px; color: #dd8c72; }
+.close-modal { display: grid; place-items: center; }
+.close-modal svg { width: 22px; height: 22px; }
+.avatar > svg { width: 32px; height: 32px; color: #d77f91; }
+.avatar.big > svg { width: 43px; height: 43px; }
+.calendar-toolbar button svg { width: 21px; height: 21px; }
+.data-notice { margin: 0 0 14px; padding: 11px 16px; border-radius: 14px; background: #e1d5ff; color: #644f73; font-size: 14px; font-weight: 800; }
+.data-notice.warning { background: #ffe5bd; color: #815a38; }
+.avatar-options { display: flex; gap: 9px; margin-top: 2px; }
+.avatar-options button { width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid #efd8d0; border-radius: 16px; background: #fffbf4; color: #b47772; transition: transform .2s ease, color .2s ease, background .2s ease; }
+.avatar-options button:hover, .avatar-options button.selected { color: #d8738a; background: #ffdce4; transform: translateY(-2px); }
+.avatar-options svg { width: 25px; height: 25px; }
+.floating-add:disabled { cursor: not-allowed; opacity: .45; animation: none; box-shadow: none; }
+.save-btn:disabled { cursor: wait; opacity: .7; }
+.form-error { margin: 14px 0 -6px; color: #c35c6c; font-size: 14px; font-weight: 700; }
+.kid-card { position: relative; }
+.delete-child { position: absolute; top: 17px; right: 17px; width: 35px; height: 35px; display: grid; place-items: center; border: 0; border-radius: 12px; color: #cf7283; background: #fff0f2; opacity: 0; transition: opacity .2s ease, transform .2s ease, background .2s ease; }
+.delete-child:hover { background: #ffd4da; transform: scale(1.08); }
+.kid-card:hover .delete-child, .delete-child:focus-visible { opacity: 1; }
+.delete-child svg { width: 18px; height: 18px; }
+@media (max-width: 700px) { .delete-child { opacity: 1; top: 14px; right: 14px; } }
+.edit-lesson, .edit-child { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 auto; border: 0; border-radius: 13px; color: #a66c68; background: #fff1e9; opacity: 0; transition: opacity .2s ease, transform .2s ease, background .2s ease; }
+.edit-lesson:hover, .edit-child:hover { background: #ffdbd5; transform: scale(1.08); }
+.edit-lesson svg, .edit-child svg { width: 18px; height: 18px; }
+.lesson-card:hover .edit-lesson, .edit-lesson:focus-visible { opacity: 1; }
+.kid-actions { position: absolute; top: 17px; right: 17px; display: flex; gap: 7px; }
+.kid-actions .delete-child { position: static; }
+.kid-actions .edit-child { opacity: 0; }
+.kid-card:hover .kid-actions .edit-child, .edit-child:focus-visible { opacity: 1; }
+@media (max-width: 700px) { .edit-lesson { opacity: 1; }.kid-actions { top: 14px; right: 14px; }.kid-actions .edit-child { opacity: 1; } }
+
+/* Compact calendar: details are an overlay so the calendar page does not grow vertically. */
+.calendar-day { border: 0; color: inherit; font: inherit; background: transparent; cursor: pointer; }
+.calendar-day:disabled { cursor: default; }
+.calendar-day.has-lesson { background: #ffe1bd; }
+.calendar-day.completed-day { background: #c9f1d8; }
+.calendar-day.current-day { color: #3c2924; outline: 2px solid #dc8494; outline-offset: -2px; box-shadow: none; }
+.calendar-day.selected-day { transform: scale(1.04); box-shadow: 0 4px 10px #83504b2b; }
+.calendar-day.completed-day i { background: #5b9870; }
+.key-pending { width: 15px; height: 15px; border-radius: 50%; background: #ffe1bd; }
+.calendar-details-backdrop { position: fixed; inset: 0; z-index: 12; padding: 20px; display: grid; place-items: center; background: #3e2b2533; backdrop-filter: blur(7px); }
+.calendar-details { width: min(590px, 100%); max-height: min(620px, calc(100vh - 40px)); overflow: auto; position: relative; padding: 21px 24px; border: 1px solid #e9d9d1; border-radius: 25px; background: #fffefa; box-shadow: 0 18px 35px #43251c44; animation: modal-enter .35s cubic-bezier(.22,.9,.3,1) both; }
+.calendar-details > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-right: 34px; }.calendar-details h2 { margin: 0; font-size: 20px; text-transform: capitalize; }.calendar-details > div > p { margin: 0; color: #946d64; font-weight: 700; }
+.close-calendar-details { position: absolute; top: 18px; right: 18px; width: 31px; height: 31px; display: grid; place-items: center; border: 0; border-radius: 10px; background: transparent; color: #65453d; }.close-calendar-details:hover { background: #fff0ed; }.close-calendar-details svg { width: 20px; height: 20px; }
+.mark-day-btn { width: 100%; min-height: 44px; margin-top: 17px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 0; border-radius: 14px; color: white; background: #d98393; font-weight: 800; transition: transform .2s ease, box-shadow .2s ease; }.mark-day-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 12px #9a546044; }.mark-day-btn svg { width: 18px; height: 18px; }
+.calendar-lesson { min-height: 72px; display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #f0dfd6; }.calendar-lesson:first-of-type { margin-top: 12px; }.calendar-lesson .avatar { width: 43px; height: 43px; border-radius: 15px; }.calendar-lesson .avatar svg { width: 25px; height: 25px; }.calendar-lesson b { font-size: 16px; }.calendar-lesson p { display: flex; align-items: center; gap: 4px; margin: 3px 0 0; color: #946d64; font-size: 14px; }.calendar-lesson p svg { width: 14px; height: 14px; }.calendar-lesson .done-btn { margin-left: auto; min-height: 38px; font-size: 13px; }
+.app-dark .calendar-details { background: #423431; border-color: #624b47; }.app-dark .calendar-details > div > p, .app-dark .calendar-lesson p { color: #d7bcb3; }
+@media (min-width: 701px) { .page-heading:has(+ .calendar-card) { margin-bottom: 18px; }.calendar-card { padding: 18px 24px 22px; }.calendar-toolbar { margin-bottom: 16px; }.calendar-toolbar h2 { font-size: 20px; }.calendar-week { font-size: 13px; }.calendar-day { min-height: 64px; border-radius: 18px; font-size: 14px; }.calendar-key { margin-top: 13px; font-size: 13px; } }
+@media (max-width: 700px) { .calendar-details { padding: 17px; border-radius: 21px; }.calendar-details h2 { font-size: 17px; }.calendar-details > div > p { font-size: 13px; }.calendar-lesson .done-btn { padding: 0 9px; font-size: 11px; }.calendar-lesson { gap: 9px; } }
+
+/* Calendar status: peach = upcoming, green = every lesson on that day is completed. */
+.calendar-day { border: 0; color: inherit; font: inherit; background: transparent; cursor: pointer; }
+.calendar-day:disabled { cursor: default; }
+.calendar-day.has-lesson { background: #ffe1bd; }
+.calendar-day.completed-day { background: #c9f1d8; }
+.calendar-day.current-day { color: #3c2924; outline: 2px solid #dc8494; outline-offset: -2px; box-shadow: none; }
+.calendar-day.selected-day { transform: scale(1.04); box-shadow: 0 4px 10px #83504b2b; }
+.calendar-day.completed-day i { background: #5b9870; }
+.key-pending { width: 15px; height: 15px; border-radius: 50%; background: #ffe1bd; }
+.calendar-details { margin-top: 16px; padding: 21px 24px; border: 1px solid #e9d9d1; border-radius: 25px; background: #fffefa; box-shadow: 0 3px 5px #42221b0f; animation: card-enter .35s ease both; }
+.calendar-details > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }.calendar-details h2 { margin: 0; font-size: 20px; text-transform: capitalize; }.calendar-details > div > p { margin: 0; color: #946d64; font-weight: 700; }
+.calendar-lesson { min-height: 72px; display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #f0dfd6; }.calendar-lesson:first-of-type { margin-top: 12px; }.calendar-lesson .avatar { width: 43px; height: 43px; border-radius: 15px; }.calendar-lesson .avatar svg { width: 25px; height: 25px; }.calendar-lesson b { font-size: 16px; }.calendar-lesson p { display: flex; align-items: center; gap: 4px; margin: 3px 0 0; color: #946d64; font-size: 14px; }.calendar-lesson p svg { width: 14px; height: 14px; }.calendar-lesson .done-btn { margin-left: auto; min-height: 38px; font-size: 13px; }
+.app-dark .calendar-details { background: #423431; border-color: #624b47; }.app-dark .calendar-details > div > p, .app-dark .calendar-lesson p { color: #d7bcb3; }
+@media (max-width: 700px) { .calendar-details { padding: 17px; border-radius: 21px; }.calendar-details h2 { font-size: 17px; }.calendar-details > div > p { font-size: 13px; }.calendar-lesson .done-btn { padding: 0 9px; font-size: 11px; }.calendar-lesson { gap: 9px; } }
+
+@media (max-width: 700px) {
+  .heading-emoji svg { width: 38px; height: 38px; }
+  .bunny span svg { width: 29px; height: 29px; }
+  .floating-add svg { width: 25px; height: 25px; }
+}
+
+.monthly-report { margin-top: 26px; padding: 24px; border: 1px solid #e9d9d1; border-radius: 25px; background: #fffefa; box-shadow: 0 3px 5px #42221b0f; }
+.monthly-report-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.monthly-report-heading h2 { margin: 0; font-size: 24px; }
+.monthly-report-heading p, .monthly-report-empty { margin: 5px 0 0; color: #946d64; }
+.download-csv { min-height: 42px; padding: 0 17px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; flex: none; border: 0; border-radius: 999px; background: #dc8494; color: white; font-weight: 800; }
+.download-csv svg { width: 19px; height: 19px; }
+.download-csv:disabled, .mark-day-btn:disabled { cursor: not-allowed; opacity: .5; }
+.monthly-report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)); gap: 12px; margin-top: 20px; }
+.monthly-report-card { min-width: 0; padding: 15px; display: flex; align-items: flex-start; gap: 12px; border: 1px solid #f0dfd6; border-radius: 19px; background: #fffaf5; }
+.monthly-report-card .avatar { width: 45px; height: 45px; border-radius: 16px; }
+.monthly-report-card > div:last-child { min-width: 0; }
+.monthly-report-card h3 { margin: 0 0 2px; font-size: 18px; overflow-wrap: anywhere; }
+.monthly-report-card b { color: #b76477; }
+.monthly-report-card p { margin: 5px 0 0; color: #946d64; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.taught-day-form { display: grid; gap: 9px; margin-top: 16px; }
+.taught-day-form label { font-weight: 800; }
+.taught-day-form select { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid #f0d8ce; border-radius: 13px; background: #fffbf4; color: #4a342e; }
+.taught-day-form .mark-day-btn { margin-top: 2px; }
+.calendar-details-hint { margin: 12px 0 0; color: #946d64; font-size: 14px; }
+.calendar-lesson-info { min-width: 0; }
+.calendar-edit-lesson { opacity: 1; }
+.calendar-lesson .calendar-edit-lesson { margin-left: auto; }
+.calendar-lesson .done-btn { margin-left: 0; }
+.app-dark .monthly-report, .app-dark .monthly-report-card { background: #423431; border-color: #624b47; }
+.app-dark .monthly-report-heading p, .app-dark .monthly-report-empty, .app-dark .monthly-report-card p, .app-dark .calendar-details-hint { color: #d7bcb3; }
+@media (max-width: 700px) {
+  .monthly-report { padding: 17px; }
+  .monthly-report-heading { align-items: flex-start; }
+  .monthly-report-heading h2 { font-size: 19px; }
+  .monthly-report-heading p { font-size: 13px; }
+  .download-csv { min-height: 38px; padding: 0 10px; font-size: 12px; }
+  .monthly-report-grid { grid-template-columns: 1fr; }
+  .calendar-lesson .calendar-edit-lesson { width: 31px; height: 31px; }
+}
+@media (max-width: 390px) {
+  .lesson-card, .calendar-lesson { flex-wrap: wrap; }
+  .lesson-card .lesson-info, .calendar-lesson-info { flex: 1 1 115px; }
+  .lesson-card .done-btn, .calendar-lesson .done-btn { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; }
+}
