@@ -2,6 +2,8 @@
 
 Một dashboard nhỏ để theo dõi lịch dạy, học phí và nhịp dạy trong tuần.
 
+Xem [hướng dẫn sử dụng](HUONG_DAN_SU_DUNG.md) để biết cách thêm bé, ghi nhận buổi dạy và tải báo cáo tháng.
+
 ## Chạy dự án
 
 ```bash

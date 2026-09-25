@@ -260,10 +260,6 @@ button { cursor: pointer; }
 .monthly-report-card h3 { margin: 0 0 2px; font-size: 18px; overflow-wrap: anywhere; }
 .monthly-report-card b { color: #b76477; }
 .monthly-report-card p { margin: 5px 0 0; color: #946d64; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
-.taught-day-form { display: grid; gap: 9px; margin-top: 16px; }
-.taught-day-form label { font-weight: 800; }
-.taught-day-form select { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid #f0d8ce; border-radius: 13px; background: #fffbf4; color: #4a342e; }
-.taught-day-form .mark-day-btn { margin-top: 2px; }
 .calendar-details-hint { margin: 12px 0 0; color: #946d64; font-size: 14px; }
 .calendar-lesson-info { min-width: 0; }
 .calendar-edit-lesson { opacity: 1; }

@@ -7,12 +7,12 @@ export function datesInMonth(month: string) {
   return Array.from({ length: new Date(year, monthNumber, 0).getDate() }, (_, index) => `${month}-${String(index + 1).padStart(2, '0')}`)
 }
 
-export function expandDailyLessons(kids: Child[], lessons: Lesson[], dates: string[]): DisplayLesson[] {
+export function expandDailyLessons(kids: Child[], lessons: Lesson[], dates: string[], includeAllChildren = false): DisplayLesson[] {
   const wantedDates = new Set(dates)
   const saved = lessons.filter((lesson) => wantedDates.has(lesson.lesson_date))
   const savedChildDays = new Set(saved.map((lesson) => `${lesson.child_id}\u0000${lesson.lesson_date}`))
   const daily = dates.flatMap((date) => kids
-    .filter((child) => child.daily_start_date <= date && !savedChildDays.has(`${child.id}\u0000${date}`))
+    .filter((child) => (includeAllChildren || child.daily_start_date <= date) && !savedChildDays.has(`${child.id}\u0000${date}`))
     .map((child): DisplayLesson => ({
       id: dailyLessonId(child.id, date),
       child_id: child.id,

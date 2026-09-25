@@ -26,7 +26,7 @@ import { X } from '@phosphor-icons/react/X'
 import { Trash } from '@phosphor-icons/react/Trash'
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore'
 import { asLocalDate, calendarMonthAfterDateChange, monthKey, type Child, type DisplayLesson, type Lesson } from './lib/data'
-import { dailyLessonId, datesInMonth, expandDailyLessons } from './lib/dailySchedule'
+import { datesInMonth, expandDailyLessons } from './lib/dailySchedule'
 import { getMonthlyTeachingReport, monthlyReportCsv, type MonthlyTeachingRecord } from './lib/monthlyReport'
 import { firestore } from './lib/firebase'
 
@@ -200,13 +200,6 @@ function App() {
       }
     } catch { setLoadError('Không thể lưu trạng thái đã dạy. Vui lòng thử lại.') }
   }
-  const addTaughtLesson = async (date: string, childId: string) => {
-    if (!firestore || !kids.some((child) => child.id === childId)) return false
-    try {
-      await setDoc(doc(firestore, 'lessons', dailyLessonId(childId, date)), { child_id: childId, lesson_date: date, completed: true }, { merge: true })
-      return true
-    } catch { return false }
-  }
   const updateLesson = async (id: string, input: LessonInput) => {
     if (!firestore) return false
     try { await updateDoc(doc(firestore, 'lessons', id), input); return true } catch { return false }
@@ -241,7 +234,7 @@ function App() {
     <section className="shell">
       <DataNotice state={dataState} error={loadError} />
       {tab === 'today' && <TodayView date={currentDate} lessons={sessionsToday} kids={kids} dataReady={canWrite} completed={completedToday} pct={todayPct} streak={streak} weekCompleted={completedThisWeek} onToggle={toggleLesson} onEdit={openLessonEditor} />}
-      {tab === 'calendar' && <CalendarView lessons={lessons} kids={kids} month={calendarMonth} todayDate={currentDate} dataReady={canWrite} onChangeMonth={setCalendarMonth} onToggle={toggleLesson} onMarkDay={markDayAsTaught} onAddTaught={addTaughtLesson} onEdit={openLessonEditor} />}
+      {tab === 'calendar' && <CalendarView lessons={lessons} kids={kids} month={calendarMonth} todayDate={currentDate} dataReady={canWrite} onChangeMonth={setCalendarMonth} onToggle={toggleLesson} onMarkDay={markDayAsTaught} onEdit={openLessonEditor} />}
       {tab === 'children' && <ChildrenView kids={kids} lessons={lessons} weekDateSet={weekDateSet} onDelete={deleteChild} onEdit={(child) => { setEditingChild(child); setShowChildModal(true) }} />}
       {tab === 'summary' && <SummaryView lessons={lessons} kids={kids} currentDate={currentDate} weekDates={weekDates} streak={streak} />}
     </section>
@@ -276,7 +269,7 @@ function LessonCard({ lesson, child, dataReady, onToggle, onEdit }: { lesson: Di
   return <article className={`lesson-card ${lesson.completed ? 'is-complete' : ''}`}><div className={`avatar ${child?.avatarTone ?? 'pink'}`}><ChildAvatar child={child} /></div><div className="lesson-info">{!lesson.virtual && <div className="lesson-meta"><b><Clock weight="bold" /> {lesson.starts_at || 'Chưa đặt giờ'}</b></div>}<h3>{child?.name || 'Bé yêu'}</h3><p>{lesson.virtual ? 'Lịch hằng ngày' : lesson.content || 'Chưa ghi nội dung'}{lesson.duration ? ` · ${lesson.duration} phút` : ''}</p></div><button className="edit-lesson" aria-label="Chỉnh sửa buổi dạy" disabled={!dataReady} onClick={() => onEdit(lesson)}><PencilSimple weight="bold" /></button><button onClick={() => onToggle(lesson)} disabled={!dataReady} className={lesson.completed ? 'done-btn muted' : 'done-btn'}><Check weight="bold" /> {lesson.completed ? 'Đã dạy rồi' : 'Đã dạy'}</button></article>
 }
 
-function CalendarView({ lessons, kids, month: monthCursor, todayDate, dataReady, onChangeMonth, onToggle, onMarkDay, onAddTaught, onEdit }: { lessons: Lesson[]; kids: Child[]; month: Date; todayDate: string; dataReady: boolean; onChangeMonth: (date: Date) => void; onToggle: (lesson: DisplayLesson) => void; onMarkDay: (date: string) => void; onAddTaught: (date: string, childId: string) => Promise<boolean>; onEdit: (lesson: DisplayLesson) => void }) {
+function CalendarView({ lessons, kids, month: monthCursor, todayDate, dataReady, onChangeMonth, onToggle, onMarkDay, onEdit }: { lessons: Lesson[]; kids: Child[]; month: Date; todayDate: string; dataReady: boolean; onChangeMonth: (date: Date) => void; onToggle: (lesson: DisplayLesson) => void; onMarkDay: (date: string) => void; onEdit: (lesson: DisplayLesson) => void }) {
   const year = monthCursor.getFullYear(), month = monthCursor.getMonth(), firstDay = (new Date(year, month, 1).getDay() + 6) % 7, days = new Date(year, month + 1, 0).getDate()
   const selectedMonthKey = monthKey(monthCursor)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
@@ -289,7 +282,7 @@ function CalendarView({ lessons, kids, month: monthCursor, todayDate, dataReady,
   const dateKey = (day: number) => `${selectedMonthKey}-${String(day).padStart(2, '0')}`
   const selectMonth = (nextMonth: Date) => { onChangeMonth(nextMonth); setSelectedDate(null) }
   const visibleSelectedDate = selectedDate?.startsWith(`${selectedMonthKey}-`) ? selectedDate : null
-  const selectedLessons = visibleSelectedDate ? lessonsByDate.get(visibleSelectedDate) ?? [] : []
+  const selectedLessons = visibleSelectedDate ? expandDailyLessons(kids, lessons, [visibleSelectedDate], visibleSelectedDate < todayDate) : []
   const downloadCsv = () => {
     const blob = new Blob([monthlyReportCsv(report, selectedMonthKey)], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
@@ -308,14 +301,14 @@ function CalendarView({ lessons, kids, month: monthCursor, todayDate, dataReady,
     <section className="calendar-card">
       <div className="calendar-toolbar"><button aria-label="Tháng trước" onClick={() => selectMonth(new Date(year, month - 1, 1))}><CaretLeft /></button><h2>Tháng {month + 1} · {year}</h2><button aria-label="Tháng sau" onClick={() => selectMonth(new Date(year, month + 1, 1))}><CaretRight /></button></div>
       <div className="calendar-week">{weekLabels.map((day) => <b key={day}>{day}</b>)}</div>
-      <div className="calendar-grid">{cells.map((day, index) => { const key = day ? dateKey(day) : '', dayLessons = lessonsByDate.get(key) ?? [], hasLesson = dayLessons.length > 0, isComplete = hasLesson && dayLessons.every((lesson) => lesson.completed); return <button type="button" key={index} disabled={!day} onClick={() => day && setSelectedDate(key)} className={`calendar-day ${hasLesson ? 'has-lesson' : ''} ${isComplete ? 'completed-day' : ''} ${key === todayDate ? 'current-day' : ''} ${key === visibleSelectedDate ? 'selected-day' : ''}`}>{day && <><b>{day}</b>{hasLesson && <i />}</>}</button> })}</div>
+      <div className="calendar-grid">{cells.map((day, index) => { const key = day ? dateKey(day) : '', dayLessons = lessonsByDate.get(key) ?? [], hasLesson = dayLessons.length > 0, isComplete = hasLesson && dayLessons.every((lesson) => lesson.completed) && (key >= todayDate || kids.every((kid) => dayLessons.some((lesson) => lesson.child_id === kid.id && lesson.completed))); return <button type="button" key={index} disabled={!day} onClick={() => day && setSelectedDate(key)} className={`calendar-day ${hasLesson ? 'has-lesson' : ''} ${isComplete ? 'completed-day' : ''} ${key === todayDate ? 'current-day' : ''} ${key === visibleSelectedDate ? 'selected-day' : ''}`}>{day && <><b>{day}</b>{hasLesson && <i />}</>}</button> })}</div>
     </section>
     <div className="calendar-key"><span className="key-pending" /> Còn lịch <span className="key-done" /> Đã dạy xong <span className="key-today" /> Hôm nay</div>
     <section className="monthly-report" aria-labelledby="monthly-report-title">
       <div className="monthly-report-heading"><div><h2 id="monthly-report-title">Tổng hợp dạy tháng {month + 1}</h2><p>Mỗi bé được tính một lần cho mỗi ngày đã dạy.</p></div><button type="button" className="download-csv" disabled={!dataReady || !kids.length} onClick={downloadCsv}><DownloadSimple weight="bold" /> Tải CSV</button></div>
       {kids.length ? <div className="monthly-report-grid">{report.map((entry) => <MonthlyReportCard key={entry.child.id} entry={entry} />)}</div> : <p className="monthly-report-empty">Chưa có bé nào để tổng hợp. Thêm bé trong mục Các bé nhé.</p>}
     </section>
-    {visibleSelectedDate && <CalendarDetails key={visibleSelectedDate} date={visibleSelectedDate} lessons={selectedLessons} kids={kids} dataReady={dataReady} onToggle={onToggle} onMarkDay={onMarkDay} onAddTaught={onAddTaught} onEdit={editFromCalendar} onClose={() => setSelectedDate(null)} />}
+    {visibleSelectedDate && <CalendarDetails date={visibleSelectedDate} todayDate={todayDate} lessons={selectedLessons} kids={kids} dataReady={dataReady} onToggle={onToggle} onMarkDay={onMarkDay} onEdit={editFromCalendar} onClose={() => setSelectedDate(null)} />}
   </>
 }
 
@@ -323,31 +316,13 @@ function MonthlyReportCard({ entry }: { entry: MonthlyTeachingRecord }) {
   return <article className="monthly-report-card"><div className={`avatar ${entry.child.avatarTone}`}><ChildAvatar child={entry.child} /></div><div><h3>{entry.child.name || 'Bé yêu'}</h3><b>{entry.totalDays} ngày đã dạy</b><p>{entry.dates.length ? entry.dates.map((date) => `${date.slice(8)}/${date.slice(5, 7)}`).join(', ') : 'Chưa có ngày dạy trong tháng'}</p></div></article>
 }
 
-function CalendarDetails({ date, lessons, kids, dataReady, onToggle, onMarkDay, onAddTaught, onEdit, onClose }: { date: string; lessons: DisplayLesson[]; kids: Child[]; dataReady: boolean; onToggle: (lesson: DisplayLesson) => void; onMarkDay: (date: string) => void; onAddTaught: (date: string, childId: string) => Promise<boolean>; onEdit: (lesson: DisplayLesson) => void; onClose: () => void }) {
-  const [selectingChild, setSelectingChild] = useState(false)
-  const [selectedChild, setSelectedChild] = useState(kids[0]?.id ?? '')
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-  const [error, setError] = useState('')
+function CalendarDetails({ date, todayDate, lessons, kids, dataReady, onToggle, onMarkDay, onEdit, onClose }: { date: string; todayDate: string; lessons: DisplayLesson[]; kids: Child[]; dataReady: boolean; onToggle: (lesson: DisplayLesson) => void; onMarkDay: (date: string) => void; onEdit: (lesson: DisplayLesson) => void; onClose: () => void }) {
   const label = new Intl.DateTimeFormat('vi-VN', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${date}T12:00:00`))
   const hasPending = lessons.some((lesson) => !lesson.completed)
-  const saveTaughtDay = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setSaving(true)
-    setError('')
-    const success = await onAddTaught(date, selectedChild)
-    setSaving(false)
-    if (success) { setSaved(true); setSelectingChild(false) }
-    else setError('Không thể lưu ngày dạy. Vui lòng thử lại.')
-  }
-
-  return <div className="calendar-details-backdrop" role="presentation" onMouseDown={onClose}><section className="calendar-details" onMouseDown={(event) => event.stopPropagation()}><button className="close-calendar-details" aria-label="Đóng" onClick={onClose}><X /></button><div><h2>{label}</h2><p>{lessons.length ? `${lessons.length} buổi học` : 'Chưa có lịch dạy'}</p></div>
-    {hasPending && <button className="mark-day-btn" disabled={!dataReady} onClick={() => onMarkDay(date)}><Check weight="bold" /> Đánh dấu tất cả đã dạy</button>}
-    {!lessons.length && !selectingChild && !saved && <button className="mark-day-btn" disabled={!dataReady || !kids.length} onClick={() => { setSelectedChild(kids[0].id); setSelectingChild(true) }}><Check weight="bold" /> Đánh dấu đã dạy ngày này</button>}
+  return <div className="calendar-details-backdrop" role="presentation" onMouseDown={onClose}><section className="calendar-details" onMouseDown={(event) => event.stopPropagation()}><button className="close-calendar-details" aria-label="Đóng" onClick={onClose}><X /></button><div><h2>{label}</h2><p>{lessons.length ? date < todayDate ? `${new Set(lessons.map((lesson) => lesson.child_id)).size} bé` : `${lessons.length} buổi học` : 'Chưa có lịch dạy'}</p></div>
+    {hasPending && date >= todayDate && <button className="mark-day-btn" disabled={!dataReady} onClick={() => onMarkDay(date)}><Check weight="bold" /> Đánh dấu tất cả đã dạy</button>}
     {!lessons.length && !kids.length && <p className="calendar-details-hint">Thêm bé trong mục Các bé trước khi ghi nhận ngày dạy.</p>}
-    {!lessons.length && selectingChild && <form className="taught-day-form" onSubmit={saveTaughtDay}><label htmlFor="taught-child">Đã dạy bé nào?</label><select id="taught-child" value={selectedChild} onChange={(event) => setSelectedChild(event.target.value)} required>{kids.map((child) => <option key={child.id} value={child.id}>{child.name || 'Bé yêu'}</option>)}</select>{error && <p className="form-error">{error}</p>}<button className="mark-day-btn" disabled={saving || !dataReady} type="submit"><Check weight="bold" /> {saving ? 'Đang lưu…' : 'Lưu ngày đã dạy'}</button></form>}
-    {saved && !lessons.length && <p className="calendar-details-hint">Đã lưu ngày dạy. Đang cập nhật lịch…</p>}
-    {lessons.map((lesson) => { const child = kids.find((kid) => kid.id === lesson.child_id); return <article className="calendar-lesson" key={lesson.id}><div className={`avatar ${child?.avatarTone ?? 'pink'}`}><ChildAvatar child={child} /></div><div className="calendar-lesson-info"><b>{child?.name || 'Chưa gắn bé'}</b><p><Clock weight="bold" /> {lesson.virtual ? 'Lịch hằng ngày' : lesson.starts_at || 'Chưa đặt giờ'}{lesson.duration ? ` · ${lesson.duration} phút` : ''}</p></div><button className="edit-lesson calendar-edit-lesson" aria-label={`Chỉnh sửa buổi dạy ${child?.name || 'chưa gắn bé'}`} disabled={!dataReady} onClick={() => onEdit(lesson)}><PencilSimple weight="bold" /></button><button className={lesson.completed ? 'done-btn muted' : 'done-btn'} disabled={!dataReady} onClick={() => onToggle(lesson)}><Check weight="bold" /> {lesson.completed ? 'Đã dạy' : 'Đánh dấu đã dạy'}</button></article> })}
+    {lessons.map((lesson) => { const child = kids.find((kid) => kid.id === lesson.child_id); return <article className="calendar-lesson" key={lesson.id}><div className={`avatar ${child?.avatarTone ?? 'pink'}`}><ChildAvatar child={child} /></div><div className="calendar-lesson-info"><b>{child?.name || 'Chưa gắn bé'}</b><p><Clock weight="bold" /> {lesson.virtual ? child && date < child.daily_start_date ? 'Chưa ghi nhận buổi dạy' : 'Lịch hằng ngày' : lesson.starts_at || 'Chưa đặt giờ'}{lesson.duration ? ` · ${lesson.duration} phút` : ''}</p></div><button className="edit-lesson calendar-edit-lesson" aria-label={`Chỉnh sửa buổi dạy ${child?.name || 'chưa gắn bé'}`} disabled={!dataReady} onClick={() => onEdit(lesson)}><PencilSimple weight="bold" /></button><button className={lesson.completed ? 'done-btn muted' : 'done-btn'} aria-label={`${lesson.completed ? 'Bỏ đánh dấu đã dạy' : 'Đánh dấu đã dạy'} cho ${child?.name || 'bé'}`} aria-pressed={lesson.completed} disabled={!dataReady} onClick={() => onToggle(lesson)}><Check weight="bold" /> {lesson.completed ? 'Đã dạy' : 'Đánh dấu đã dạy'}</button></article> })}
   </section></div>
 }
 

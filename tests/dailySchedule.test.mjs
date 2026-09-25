@@ -38,6 +38,20 @@ test('unmarked saved sessions stay pending without creating a second daily row',
   assert.equal(getMonthlyTeachingReport([kid], [saved], '2026-09')[0].totalDays, 0)
 })
 
+test('historical calendar details include every child and preserve saved status for each child', () => {
+  const kids = [child('a', '2026-09-25'), child('b', '2026-09-27'), child('c', '2026-09-27')]
+  const date = '2026-09-24'
+  const saved = [lesson(dailyLessonId('a', date), 'a', date, true)]
+
+  assert.deepEqual(expandDailyLessons(kids, saved, [date]).map(({ child_id }) => child_id), ['a'])
+  const historical = expandDailyLessons(kids, saved, [date], true)
+  assert.deepEqual(historical.map(({ child_id, completed }) => [child_id, completed]), [
+    ['a', true], ['b', false], ['c', false],
+  ])
+  assert.equal(historical.find(({ child_id }) => child_id === 'a')?.virtual, undefined)
+  assert.equal(historical.find(({ child_id }) => child_id === 'b')?.id, dailyLessonId('b', date))
+})
+
 test('returns every calendar date for the selected month', () => {
   assert.equal(datesInMonth('2028-02').length, 29)
   assert.equal(datesInMonth('2026-02').length, 28)
